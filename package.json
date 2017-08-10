@@ -1,17 +1,19 @@
 {
   "name": "@nfib/engage-framework",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "files": [
-    "dist"
+    "lib"
   ],
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "check": "npm run lint && npm run test",
     "test": "jest",
     "lint": "eslint src/",
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf lib",
     "flow": "flow",
-    "build": "babel src/ -d dist/ --ignore *.spec.js,__mocks__,__snapshots__ src"
+    "build": "npm run build:lib && npm run build:flow",
+    "build:lib": "babel src/ -d lib/ --ignore '**/*.spec.js,__mocks__,__snapshots__'",
+    "build:flow": "flow-copy-source src/ lib/ -v --ignore '**/*.spec.js,__mocks__,__snapshots__'"
   },
   "keywords": [],
   "author": "NFIB ITPE",
@@ -29,6 +31,7 @@
     "eslint-plugin-flow": "^2.29.1",
     "eslint-plugin-react": "^7.2.0",
     "flow-bin": "^0.52.0",
+    "flow-copy-source": "^1.2.0",
     "jest-cli": "^20.0.4",
     "jest-fetch-mock": "^1.2.1",
     "rimraf": "^2.6.1"
