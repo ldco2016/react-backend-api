@@ -1,26 +1,20 @@
 // @flow
 import 'whatwg-fetch';
 import { RequestInit } from 'whatwg-fetch';
-import { camelCase } from 'lodash';
-import { merge } from 'lodash/fp';
+import camelCaseKey from 'camelcase-keys';
+import merge from 'lodash.merge';
 import urlLib from 'url';
 
 const DEFAULT_URL = 'http://localhost';
 
-const normalizeCasing = object => {
-  if (!object || typeof object !== 'object') {
-    return object;
+const normalizeCasing = value => {
+  if (!value || typeof value !== 'object') {
+    return value;
   }
-  if (Array.isArray(object)) {
-    return object.map(normalizeCasing);
+  if (Array.isArray(value)) {
+    return value.map(normalizeCasing);
   }
-
-  return Object.keys(object).reduce((acc, key) => {
-    return {
-      ...acc,
-      [camelCase(key)]: normalizeCasing(object[key]),
-    };
-  }, {});
+  return camelCaseKey(value, { deep: true });
 };
 
 export const defaultFetchHeaders: { [key: string]: any } = {
@@ -31,8 +25,6 @@ export const defaultFetchHeaders: { [key: string]: any } = {
     'Content-Type': 'application/json',
   },
 };
-
-const headerMerger = merge(defaultFetchHeaders);
 
 const cleanBody = entity =>
   Object.keys(entity).reduce((acc, key: string) => {
@@ -72,7 +64,7 @@ const callApi = (url: string = '', options?: CallApiInit = {}) => {
   const urlObj = urlLib.parse(apiUrl);
   urlObj.query = urlObj.query || params || '';
   const urlString = urlLib.format(urlObj);
-  const fetchOptions = headerMerger(restOptions);
+  const fetchOptions = merge(defaultFetchHeaders, restOptions);
   return fetch(urlString, cleanBody(fetchOptions)).then(resp => {
     if (resp.status !== 204) {
       return resp.json().then(json => {
