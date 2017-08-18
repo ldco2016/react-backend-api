@@ -1,4 +1,8 @@
-import callApi, { defaultFetchHeaders } from './index';
+import callApi, {
+  defaultFetchHeaders,
+  callApiFactory,
+  DEFAULT_URL,
+} from './index';
 var mockFetch;
 
 jest.mock('whatwg-fetch', () => {
@@ -145,5 +149,84 @@ describe('callApi', () => {
     };
     mockFetch.mockResponseOnce(JSON.stringify(sampleObject));
     return callApi().then(({ json }) => expect(json).toMatchSnapshot());
+  });
+});
+describe('callApiFactory', () => {
+  it('should return a function', () => {
+    expect(typeof callApiFactory()).toBe('function');
+  });
+  it('should accept/prepend base url', () => {
+    const baseUrl = 'https://test';
+    const restUrl = '/rest-of-url';
+    const callApi = callApiFactory(baseUrl);
+
+    callApi(restUrl);
+    expect(mockFetch).lastCalledWith(baseUrl + restUrl, defaultFetchHeaders);
+  });
+  it('should prefer call url if both it and baseUrl are absolute', () => {
+    const baseUrl = 'https://base';
+    const restUrl = 'https://call/';
+    const callApi = callApiFactory(baseUrl);
+
+    callApi(restUrl);
+    expect(mockFetch).lastCalledWith(restUrl, defaultFetchHeaders);
+  });
+  it('should merge base options with call options', () => {
+    const baseOptions = {
+      base: 'test',
+      headers: {
+        appId: '1',
+      },
+    };
+    const restOptions = {
+      headers: {
+        'x-something': 'stuff',
+      },
+      stuff: 'more-stuff',
+    };
+
+    const callApi = callApiFactory(null, baseOptions);
+
+    callApi(null, restOptions);
+    expect(mockFetch).lastCalledWith(
+      DEFAULT_URL + '/',
+      expect.objectContaining({
+        base: 'test',
+        headers: expect.objectContaining({
+          appId: '1',
+          'x-something': 'stuff',
+        }),
+        stuff: 'more-stuff',
+      })
+    );
+  });
+  it('should give call options precedence over base options', () => {
+    const baseOptions = {
+      base: 'test',
+      headers: {
+        appId: '1',
+      },
+    };
+    const restOptions = {
+      base: 'overwrite',
+      headers: {
+        appId: '2',
+      },
+      stuff: 'more-stuff',
+    };
+
+    const callApi = callApiFactory(null, baseOptions);
+
+    callApi(null, restOptions);
+    expect(mockFetch).lastCalledWith(
+      DEFAULT_URL + '/',
+      expect.objectContaining({
+        base: 'overwrite',
+        headers: expect.objectContaining({
+          appId: '2',
+        }),
+        stuff: 'more-stuff',
+      })
+    );
   });
 });

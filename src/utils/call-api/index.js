@@ -5,7 +5,7 @@ import camelCaseKey from 'camelcase-keys';
 import merge from 'lodash.merge';
 import urlLib from 'url';
 
-const DEFAULT_URL = 'http://localhost';
+export const DEFAULT_URL = 'http://localhost';
 
 const normalizeCasing = value => {
   if (!value || typeof value !== 'object') {
@@ -58,8 +58,22 @@ type CallApiInit = RequestInit & {
   params?: { [key: string]: string | number },
 };
 
+const isAbsolutePath = (url: string) => {
+  return /https?:\/\//.test(url);
+};
+
+export const resolveUrl = (baseUrl: string, url?: string = '') => {
+  if (!url) {
+    return baseUrl;
+  }
+  if (baseUrl && isAbsolutePath(baseUrl) && !isAbsolutePath(url)) {
+    return urlLib.resolve(baseUrl, url);
+  }
+  return url;
+};
+
 const callApi = (url: string = '', options?: CallApiInit = {}) => {
-  const apiUrl = /https?:\/\//.test(url) ? url : `${DEFAULT_URL}${url}`;
+  const apiUrl = resolveUrl(DEFAULT_URL, url);
   const { params, ...restOptions } = options;
   const urlObj = urlLib.parse(apiUrl);
   urlObj.query = urlObj.query || params || '';
@@ -74,6 +88,13 @@ const callApi = (url: string = '', options?: CallApiInit = {}) => {
     }
     return { json: null, resp };
   });
+};
+
+export const callApiFactory = (
+  baseUrl: string = '',
+  baseOptions?: CallApiInit = {}
+) => (url: string = '', options?: CallApiInit = {}) => {
+  return callApi(resolveUrl(baseUrl, url), merge(baseOptions, options));
 };
 
 export default callApi;
