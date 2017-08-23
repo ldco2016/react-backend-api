@@ -72,7 +72,7 @@ export const resolveUrl = (baseUrl: string, url?: string = '') => {
   return url;
 };
 
-const callApi = (url: string = '', options?: CallApiInit = {}) => {
+export const callApi = (url: string = '', options?: CallApiInit = {}) => {
   const apiUrl = resolveUrl(DEFAULT_URL, url);
   const { params, ...restOptions } = options;
   const urlObj = urlLib.parse(apiUrl);
@@ -97,4 +97,4 @@ export const callApiFactory = (
   return callApi(resolveUrl(baseUrl, url), merge(baseOptions, options));
 };
 
-export default callApi;
+export default callApiFactory;

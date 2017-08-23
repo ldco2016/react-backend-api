@@ -1,6 +1,7 @@
-import callApi, {
+import {
   defaultFetchHeaders,
   callApiFactory,
+  callApi,
   DEFAULT_URL,
 } from './index';
 var mockFetch;
