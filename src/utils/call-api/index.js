@@ -1,20 +1,26 @@
 // @flow
 import 'whatwg-fetch';
 import { RequestInit } from 'whatwg-fetch';
-import camelCaseKey from 'camelcase-keys';
 import merge from 'lodash.merge';
+import camelCase from 'lodash.camelcase';
 import urlLib from 'url';
 
 export const DEFAULT_URL = 'http://localhost';
 
-const normalizeCasing = value => {
-  if (!value || typeof value !== 'object') {
-    return value;
+const normalizeCasing = object => {
+  if (!object || typeof object !== 'object') {
+    return object;
   }
-  if (Array.isArray(value)) {
-    return value.map(normalizeCasing);
+  if (Array.isArray(object)) {
+    return object.map(normalizeCasing);
   }
-  return camelCaseKey(value, { deep: true });
+
+  return Object.keys(object).reduce((acc, key) => {
+    return {
+      ...acc,
+      [camelCase(key)]: normalizeCasing(object[key]),
+    };
+  }, {});
 };
 
 export const defaultFetchHeaders: { [key: string]: any } = {
