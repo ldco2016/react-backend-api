@@ -1,8 +1,8 @@
 // @flow
 import 'whatwg-fetch';
 import { RequestInit } from 'whatwg-fetch';
-import merge from 'lodash.merge';
-import camelCase from 'lodash.camelcase';
+import { merge } from 'lodash/fp';
+import { camelCase } from 'lodash';
 import urlLib from 'url';
 
 export const DEFAULT_URL = 'http://localhost';
@@ -84,7 +84,7 @@ export const callApi = (url: string = '', options?: CallApiInit = {}) => {
   const urlObj = urlLib.parse(apiUrl);
   urlObj.query = urlObj.query || params || '';
   const urlString = urlLib.format(urlObj);
-  const fetchOptions = merge(defaultFetchHeaders, restOptions);
+  const fetchOptions = merge(defaultFetchHeaders)(restOptions);
   return fetch(urlString, cleanBody(fetchOptions)).then(resp => {
     if (resp.status !== 204) {
       return resp.json().then(json => {
@@ -100,7 +100,7 @@ export const callApiFactory = (
   baseUrl: string = '',
   baseOptions?: CallApiInit = {}
 ) => (url: string = '', options?: CallApiInit = {}) => {
-  return callApi(resolveUrl(baseUrl, url), merge(baseOptions, options));
+  return callApi(resolveUrl(baseUrl, url), merge(baseOptions)(options));
 };
 
 export default callApiFactory;

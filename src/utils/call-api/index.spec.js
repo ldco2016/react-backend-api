@@ -230,4 +230,65 @@ describe('callApiFactory', () => {
       })
     );
   });
+
+  it('should be able to called twice with different options', () => {
+    const baseOptions = {
+      base: 'test',
+      headers: {
+        appId: '1',
+      },
+    };
+    const optionsA = {
+      base: 'overwrite',
+      headers: {
+        appId: '2',
+      },
+      stuff: 'more-stuff',
+    };
+
+    const optionsB = {
+      base: 'repeated',
+      headers: {
+        appId: '3',
+      },
+      body: JSON.stringify({ test: 'pass' }),
+    };
+
+    const callApi = callApiFactory(null, baseOptions);
+
+    callApi(null, optionsA);
+    expect(mockFetch).lastCalledWith(
+      DEFAULT_URL + '/',
+      expect.objectContaining({
+        base: 'overwrite',
+        headers: expect.objectContaining({
+          appId: '2',
+        }),
+        stuff: 'more-stuff',
+      })
+    );
+
+    callApi(null, optionsB);
+    expect(mockFetch).lastCalledWith(
+      DEFAULT_URL + '/',
+      expect.objectContaining({
+        base: 'repeated',
+        headers: expect.objectContaining({
+          appId: '3',
+        }),
+        body: '{"test":"pass"}',
+      })
+    );
+
+    callApi(null, {});
+    expect(mockFetch).lastCalledWith(
+      DEFAULT_URL + '/',
+      expect.objectContaining({
+        base: 'test',
+        headers: expect.objectContaining({
+          appId: '1',
+        }),
+      })
+    );
+  });
 });
