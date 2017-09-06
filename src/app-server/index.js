@@ -3,15 +3,12 @@ const session = require('express-session');
 const initializeMotifServer = require('./motif-server');
 const { mergeWith } = require('lodash');
 const routes = require('./routes');
-const {
-  initializeSessionToken,
-  isSessionValid,
-  hydrateToken,
-} = require('./utils/session-tokens');
+const { isSessionValid, hydrateToken } = require('./utils/session-tokens');
 
 const apiConfig = require('./configs/apiConfig.js');
 const serverConfig = require('./configs/serverConfig.js');
 const proxySetupMiddleware = require('./middleware/proxySetupMiddleware');
+
 function mergeCustomizer(objValue, srcValue) {
   if (Array.isArray(objValue)) {
     return objValue.concat(srcValue);
@@ -19,7 +16,7 @@ function mergeCustomizer(objValue, srcValue) {
 }
 const objMerge = (...args) => mergeWith(...args, mergeCustomizer);
 
-const APP_ID_HEADER_KEY = 'NFIBAppID';
+const APP_ID_HEADER_KEY = process.env.APP_ID_HEADER_KEY || 'NFIBAppID';
 const environment = process.env.NODE_ENV || 'development';
 
 const getEnvBasedValue = obj =>
@@ -90,7 +87,8 @@ module.exports = (engageServer, config) => {
   /*Add Routes*/
   engageServer.use(routes(objMerge(mergedConfig, apiConfig)));
 
-  engageServer.use('*/index.html', initializeSessionToken);
+  // this has to be added at the server level because it has to come after historyFallbacks
+  //engageServer.use('*/index.html', initializeSessionToken);
 
   return engageServer;
 };
