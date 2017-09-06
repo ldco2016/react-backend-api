@@ -45,6 +45,7 @@
     "express": "^4.15.4",
     "express-redirect": "^1.2.2",
     "express-session": "^1.15.5",
+    "cheerio": "^0.22.0",
     "cors": "^2.8.4",
     "helmet": "^3.8.1",
     "morgan": "^1.8.2",
