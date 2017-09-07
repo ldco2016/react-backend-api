@@ -1,20 +1,26 @@
 // @flow
 import 'whatwg-fetch';
 import { RequestInit } from 'whatwg-fetch';
-import camelCaseKey from 'camelcase-keys';
-import merge from 'lodash.merge';
+import { merge } from 'lodash/fp';
+import { camelCase } from 'lodash';
 import urlLib from 'url';
 
-const DEFAULT_URL = 'http://localhost';
+export const DEFAULT_URL = 'http://localhost';
 
-const normalizeCasing = value => {
-  if (!value || typeof value !== 'object') {
-    return value;
+const normalizeCasing = object => {
+  if (!object || typeof object !== 'object') {
+    return object;
   }
-  if (Array.isArray(value)) {
-    return value.map(normalizeCasing);
+  if (Array.isArray(object)) {
+    return object.map(normalizeCasing);
   }
-  return camelCaseKey(value, { deep: true });
+
+  return Object.keys(object).reduce((acc, key) => {
+    return {
+      ...acc,
+      [camelCase(key)]: normalizeCasing(object[key]),
+    };
+  }, {});
 };
 
 export const defaultFetchHeaders: { [key: string]: any } = {
@@ -58,13 +64,27 @@ type CallApiInit = RequestInit & {
   params?: { [key: string]: string | number },
 };
 
-const callApi = (url: string = '', options?: CallApiInit = {}) => {
-  const apiUrl = /https?:\/\//.test(url) ? url : `${DEFAULT_URL}${url}`;
+const isAbsolutePath = (url: string) => {
+  return /https?:\/\//.test(url);
+};
+
+export const resolveUrl = (baseUrl: string, url?: string = '') => {
+  if (!url) {
+    return baseUrl;
+  }
+  if (baseUrl && isAbsolutePath(baseUrl) && !isAbsolutePath(url)) {
+    return urlLib.resolve(baseUrl, url);
+  }
+  return url;
+};
+
+export const callApi = (url: string = '', options?: CallApiInit = {}) => {
+  const apiUrl = resolveUrl(DEFAULT_URL, url);
   const { params, ...restOptions } = options;
   const urlObj = urlLib.parse(apiUrl);
   urlObj.query = urlObj.query || params || '';
   const urlString = urlLib.format(urlObj);
-  const fetchOptions = merge(defaultFetchHeaders, restOptions);
+  const fetchOptions = merge(defaultFetchHeaders)(restOptions);
   return fetch(urlString, cleanBody(fetchOptions)).then(resp => {
     if (resp.status !== 204) {
       return resp.json().then(json => {
@@ -76,4 +96,11 @@ const callApi = (url: string = '', options?: CallApiInit = {}) => {
   });
 };
 
-export default callApi;
+export const callApiFactory = (
+  baseUrl: string = '',
+  baseOptions?: CallApiInit = {}
+) => (url: string = '', options?: CallApiInit = {}) => {
+  return callApi(resolveUrl(baseUrl, url), merge(baseOptions)(options));
+};
+
+export default callApiFactory;
