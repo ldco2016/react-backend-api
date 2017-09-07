@@ -1,9 +1,9 @@
 import fs from 'fs';
 import cheerio from 'cheerio';
-import path from 'path';
 
-export default (req, resp) => {
-  const data = fs.readFileSync(path.join('app', req.url));
+export default ({ pathResolver } = {}) => (req, resp) => {
+  const url = pathResolver ? pathResolver(req._parsedUrl) : req.url;
+  const data = fs.readFileSync(url);
   const $ = cheerio.load(data);
 
   const localConfig = Object.assign({}, resp.app.locals, resp.locals);
