@@ -64,6 +64,10 @@ type CallApiInit = RequestInit & {
   params?: { [key: string]: string | number },
 };
 
+type CallApiOptions = {
+  normalize: boolean,
+};
+
 const isAbsolutePath = (url: string) => {
   return /https?:\/\//.test(url);
 };
@@ -78,7 +82,11 @@ export const resolveUrl = (baseUrl: string, url?: string = '') => {
   return url;
 };
 
-export const callApi = (url: string = '', options?: CallApiInit = {}) => {
+export const callApi = (
+  url: string = '',
+  options?: CallApiInit = {},
+  { normalize = true }?: CallApiOptions = { normalize: true }
+) => {
   const apiUrl = resolveUrl(DEFAULT_URL, url);
   const { params, ...restOptions } = options;
   const urlObj = urlLib.parse(apiUrl);
@@ -88,7 +96,10 @@ export const callApi = (url: string = '', options?: CallApiInit = {}) => {
   return fetch(urlString, cleanBody(fetchOptions)).then(resp => {
     if (resp.status !== 204) {
       return resp.json().then(json => {
-        const results = { json: normalizeCasing(json), resp };
+        const results = {
+          json: normalize ? normalizeCasing(json) : json,
+          resp,
+        };
         return isServerError(resp.status) ? Promise.reject(results) : results;
       });
     }
