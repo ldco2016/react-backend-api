@@ -110,8 +110,12 @@ export const callApi = (
 export const callApiFactory = (
   baseUrl: string = '',
   baseOptions?: CallApiInit = {}
-) => (url: string = '', options?: CallApiInit = {}) => {
-  return callApi(resolveUrl(baseUrl, url), merge(baseOptions)(options));
+) => (url: string = '', options?: CallApiInit = {}, ...rest) => {
+  return callApi(
+    resolveUrl(baseUrl, url),
+    merge(baseOptions)(options),
+    ...rest
+  );
 };
 
 export default callApiFactory;
