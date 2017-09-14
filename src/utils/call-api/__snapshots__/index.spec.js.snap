@@ -1,5 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`callApi should allow for normalize json to be toggled off 1`] = `
+Object {
+  "Addresses": Array [
+    Object {
+      "city": "Nashville",
+    },
+    Object {
+      "State": "TN",
+    },
+  ],
+  "FirstName": "Kyle",
+  "Id": 1,
+}
+`;
+
+exports[`callApi should allow for normalize json to be toggled off 2`] = `
+Array [
+  Object {
+    "1": Object {
+      "Name": "Bill",
+    },
+    "2": Object {
+      "Name": "Jane",
+    },
+    "Addresses": Array [
+      Object {
+        "City": "Nashville",
+      },
+      Object {
+        "State": "TN",
+      },
+    ],
+    "First_Name": "Kyle",
+    "Id": 1,
+  },
+  "Joe",
+  Object {
+    "Foo": Object {
+      "BAR": Object {
+        "Fizz": Array [
+          Object {
+            "Buzz": 1,
+          },
+        ],
+      },
+    },
+  },
+]
+`;
+
 exports[`callApi should handle null/empty array/undefined within results 1`] = `
 Object {
   "addresses": Array [],

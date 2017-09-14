@@ -115,7 +115,7 @@ describe('callApi', () => {
     const sampleArray = [
       {
         Id: 1,
-        FirstName: 'Kyle',
+        First_Name: 'Kyle',
         Addresses: [{ City: 'Nashville' }, { State: 'TN' }],
         1: { Name: 'Bill' },
         '2': { Name: 'Jane' },
@@ -139,6 +139,43 @@ describe('callApi', () => {
     ]);
   });
 
+  it('should allow for normalize json to be toggled off', () => {
+    const sampleObject = {
+      Id: 1,
+      FirstName: 'Kyle',
+      Addresses: [{ city: 'Nashville' }, { State: 'TN' }],
+    };
+    const sampleArray = [
+      {
+        Id: 1,
+        First_Name: 'Kyle',
+        Addresses: [{ City: 'Nashville' }, { State: 'TN' }],
+        1: { Name: 'Bill' },
+        '2': { Name: 'Jane' },
+      },
+      'Joe',
+      {
+        Foo: {
+          BAR: {
+            Fizz: [{ Buzz: 1 }],
+          },
+        },
+      },
+    ];
+    mockFetch.mockResponses(
+      [JSON.stringify(sampleObject)],
+      [JSON.stringify(sampleArray)]
+    );
+    return Promise.all([
+      callApi(null, {}, { normalize: false }).then(({ json }) =>
+        expect(json).toMatchSnapshot()
+      ),
+      callApi(null, {}, { normalize: false }).then(({ json }) =>
+        expect(json).toMatchSnapshot()
+      ),
+    ]);
+  });
+
   it('should handle null/empty array/undefined within results', () => {
     const sampleObject = {
       Id: 1,
@@ -152,6 +189,7 @@ describe('callApi', () => {
     return callApi().then(({ json }) => expect(json).toMatchSnapshot());
   });
 });
+
 describe('callApiFactory', () => {
   it('should return a function', () => {
     expect(typeof callApiFactory()).toBe('function');
