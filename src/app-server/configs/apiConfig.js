@@ -12,7 +12,7 @@ module.exports = {
       color: 'orange',
       items: [
         'membership-info',
-        'activities',
+        'my-events',
         'surveys',
         'transactions',
         'get-involved',
@@ -50,9 +50,9 @@ module.exports = {
       icon: 'thumbs_up_down',
       color: 'grey',
     },
-    activities: {
-      title: 'My Activities',
-      url: 'activities',
+    'my-events': {
+      title: 'My Events',
+      url: 'events',
       icon: 'person_pin',
       color: 'teal',
     },
@@ -68,6 +68,10 @@ module.exports = {
       icon: 'explore',
       color: 'orange',
       component: 'GetInvolved',
+      progress: {
+        stepType: 'GetInvolved',
+        hasCompleted: true,
+      },
     },
     privacy: {
       title: 'Privacy Settings',
@@ -93,15 +97,23 @@ module.exports = {
       url: 'business-address',
       component: 'BusinessAddress',
       color: 'blue',
+      progress: {
+        stepType: 'BusinessAddress',
+        hasCompleted: true,
+      },
     },
     'topics-of-concern': {
       title: 'Grassroots Advocacy',
       url: 'topics-of-concern',
       component: 'Topics',
       color: 'green',
+      progress: {
+        stepType: 'TopicsOfConcern',
+        hasCompleted: true,
+      },
     },
     'my-representatives': {
-      title: 'My Representatives',
+      title: 'My Elected Representatives',
       url: 'my-representatives',
       component: 'Representatives',
       color: 'teal',
@@ -112,7 +124,8 @@ module.exports = {
       color: 'purple',
       title: 'Done',
       bodyTitle: 'Thank you',
-      bodyText: 'The information you provided will help NFIB serve you better.\nWhere would you like to go next?',
+      bodyText:
+        'The information you provided will help NFIB serve you better.\nWhere would you like to go next?',
       actions: {
         ballots: {
           label: 'Vote My Ballot',
@@ -165,7 +178,8 @@ module.exports = {
       color: 'blue',
       title: 'Done',
       bodyTitle: 'Thank you',
-      bodyText: 'Your responses have been captured and we appreciate you making your voice heard!',
+      bodyText:
+        'Your responses have been captured and we appreciate you making your voice heard!',
       actions: {
         ballots: {
           label: 'Back To My Ballots & Surveys',
@@ -179,8 +193,6 @@ module.exports = {
         },
       },
     },
-    join: {
-      pages: {},
-    },
+    join: {},
   },
 };
