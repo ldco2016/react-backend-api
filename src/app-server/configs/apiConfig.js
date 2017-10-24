@@ -40,31 +40,31 @@ module.exports = {
     },
     'membership-info': {
       title: 'Membership Info',
-      url: 'edit',
+      url: '/account/edit',
       icon: 'business_center',
       color: 'blue',
     },
     surveys: {
       title: 'My Ballots & Surveys',
-      url: 'surveys',
+      url: '/account/surveys',
       icon: 'thumbs_up_down',
       color: 'grey',
     },
     'my-events': {
       title: 'My Events',
-      url: 'events',
+      url: '/account/events',
       icon: 'person_pin',
       color: 'teal',
     },
     transactions: {
       title: 'My Transactions',
-      url: 'transactions',
+      url: '/account/transactions',
       icon: 'attach_money',
       color: 'green',
     },
     'get-involved': {
       title: 'Get Involved',
-      url: 'get-involved',
+      url: '/account/get-involved',
       icon: 'explore',
       color: 'orange',
       component: 'GetInvolved',
@@ -75,26 +75,26 @@ module.exports = {
     },
     privacy: {
       title: 'Privacy Settings',
-      url: 'privacy',
+      url: '/account/privacy',
       icon: 'phonelink_lock',
       color: 'red',
       roles: ['PrimaryContact'],
     },
     'preference-center': {
       title: 'Communication Preferences',
-      url: 'preferences',
+      url: '/account/preferences',
       icon: 'chat',
       color: 'purple',
     },
     password: {
       title: 'Create Password',
-      url: 'password',
+      url: '/account/onboarding/password',
       component: 'CreatePassword',
       color: 'red',
     },
     'business-address': {
       title: 'Business Address',
-      url: 'business-address',
+      url: '/account/onboarding/business-address',
       component: 'BusinessAddress',
       color: 'blue',
       progress: {
@@ -104,7 +104,7 @@ module.exports = {
     },
     'topics-of-concern': {
       title: 'Grassroots Advocacy',
-      url: 'topics-of-concern',
+      url: '/account/onboarding/topics-of-concern',
       component: 'Topics',
       color: 'green',
       progress: {
@@ -131,7 +131,7 @@ module.exports = {
           label: 'Vote My Ballot',
           primary: true,
           raised: true,
-          to: 'surveys',
+          to: '/account/surveys',
           style: {
             width: '100%',
             display: 'block',
@@ -153,7 +153,7 @@ module.exports = {
           label: 'My Account',
           primary: true,
           raised: true,
-          to: '',
+          to: '/account',
           style: {
             width: '100%',
             display: 'block',
@@ -185,7 +185,7 @@ module.exports = {
           label: 'Back To My Ballots & Surveys',
           primary: true,
           raised: true,
-          to: 'surveys',
+          to: '/account/surveys',
           style: {
             display: 'block',
             margin: '1rem auto 0',
