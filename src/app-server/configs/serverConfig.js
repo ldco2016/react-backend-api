@@ -2,7 +2,8 @@ const makeEncoreUrl = name => env =>
   `https://${name}${env ? `-${env}` : ''}.nfib.org/api/`;
 const makeDotComUrl = path => env =>
   `https://${env ? `${env}` : 'www'}.nfib.com/${path}`;
-const makeEngageUrl = name => env => `https://engage-${env}.nfib.org/${name}`;
+const makeEngageUrl = name => env =>
+  `https://engage-${env ? `-${env}` : ''}.nfib.org/${name}`;
 
 const generateUrls = lookup => fn => {
   return Object.keys(lookup).reduce((acc, key) => {
@@ -131,13 +132,18 @@ module.exports = {
     // TODO: DEPRECATE (REQUIRED REWRITE OF EVENTS)
     EventRegistration: {
       url: {
-        development: 'https://engagements-dv.nfib.org/api/eventregistrationdetails/',
-        sandbox: 'https://engagements-sb.nfib.org/api/eventregistrationdetails/',
-        integration: 'https://engagements-dv.nfib.org/api/eventregistrationdetails/',
+        development:
+          'https://engagements-dv.nfib.org/api/eventregistrationdetails/',
+        sandbox:
+          'https://engagements-sb.nfib.org/api/eventregistrationdetails/',
+        integration:
+          'https://engagements-dv.nfib.org/api/eventregistrationdetails/',
         qa: 'https://engagements-qa.nfib.org/api/eventregistrationdetails/',
         ua: 'https://engagements-ua.nfib.org/api/eventregistrationdetails/',
-        staging: 'https://engagements-st.nfib.org/api/eventregistrationdetails/',
-        production: 'https://engagements.nfib.org/api/eventregistrationdetails/',
+        staging:
+          'https://engagements-st.nfib.org/api/eventregistrationdetails/',
+        production:
+          'https://engagements.nfib.org/api/eventregistrationdetails/',
       },
       route: '/api/register',
     },
@@ -165,7 +171,8 @@ module.exports = {
     },
   },
   redirect: {
-    'email-preferences': 'http://nfib.highroadsolution.com/nfib_preference_center/default.aspx',
+    'email-preferences':
+      'http://nfib.highroadsolution.com/nfib_preference_center/default.aspx',
     join: generateDotComUrls(makeDotComUrl('signup')),
     renew: generateDotComUrls(makeDotComUrl('renew')),
     'join-existing': generateDotComUrls(makeDotComUrl('signup')),
