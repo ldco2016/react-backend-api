@@ -3,7 +3,7 @@ const makeEncoreUrl = name => env =>
 const makeDotComUrl = path => env =>
   `https://${env ? `${env}` : 'www'}.nfib.com/${path}`;
 const makeEngageUrl = name => env =>
-  `https://engage-${env ? `-${env}` : ''}.nfib.org/${name}`;
+  `https://engage${env ? `-${env}` : ''}.nfib.org/${name}`;
 
 const generateUrls = lookup => fn => {
   return Object.keys(lookup).reduce((acc, key) => {
