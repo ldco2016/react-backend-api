@@ -114,12 +114,12 @@ module.exports = {
     },
     'my-representatives': {
       title: 'My Elected Representatives',
-      url: 'my-representatives',
+      url: '/account/onboarding/my-representatives',
       component: 'Representatives',
       color: 'teal',
     },
     done: {
-      url: 'thank-you',
+      url: '/account/onboarding/thank-you',
       component: 'Completed',
       color: 'purple',
       title: 'Done',
@@ -174,7 +174,7 @@ module.exports = {
       },
     },
     surveyCompleted: {
-      url: 'thank-you',
+      url: '/account/surveys/thank-you',
       color: 'blue',
       title: 'Done',
       bodyTitle: 'Thank you',
