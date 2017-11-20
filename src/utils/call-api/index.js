@@ -95,10 +95,16 @@ export const callApi = (
   const fetchOptions = merge(defaultFetchHeaders)(restOptions);
   return fetch(urlString, cleanBody(fetchOptions)).then(resp => {
     if (resp.status !== 204) {
-      return resp.json().then(json => {
+      return resp.text().then(text => {
+        try {
+          return { resp, json: JSON.parse(text) };
+        } catch (e) {
+          return { resp, json: { message: text } };
+        }
+      }).then(obj => {
         const results = {
-          json: normalize ? normalizeCasing(json) : json,
-          resp,
+          ...obj,
+          json: normalize ? normalizeCasing(obj.json) : obj.json,
         };
         return isServerError(resp.status) ? Promise.reject(results) : results;
       });
