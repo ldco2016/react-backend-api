@@ -106,7 +106,7 @@ export const callApi = (
           ...obj,
           json: normalize ? normalizeCasing(obj.json) : obj.json,
         };
-        return isServerError(resp.status) ? Promise.reject(results) : results;
+        return isServerError(results.resp.status) ? Promise.reject(results) : results;
       });
     }
     return { json: null, resp };

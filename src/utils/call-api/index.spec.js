@@ -92,16 +92,26 @@ describe('callApi', () => {
     });
   });
 
-  it('should throw if unable to parse json', () => {
-    mockFetch.mockResponseOnce('Bad Request', { status: 400 });
+  it('should return message on bad request', () => {
+    const message = 'Bad Request';
+    mockFetch.mockResponseOnce(message, { status: 400 });
+    return callApi('/api/entity').then(({ json, resp }) => {
+      expect(json).toEqual({message});
+      expect(typeof json).toBe('object');
+      expect(resp.status).toBe(400);
+    });
+  });
+
+  it('should return error on 500 (Internal Server Error)', () => {
+    mockFetch.mockResponseOnce('Internal Server Error', { status: 500 });
     return callApi('/api/entity').then(
       () => {
-        expect.fail('It should not have resolved on invalid JSON');
+        expect.fail('It should have return an Internal Server Error message');
       },
       err => {
         expect(err).toBeDefined();
         expect(typeof err).toBe('object');
-        expect(err.toString()).toContain('SyntaxError:');
+        expect(err.json.message).toEqual('Internal Server Error');
       }
     );
   });
