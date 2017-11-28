@@ -27,7 +27,7 @@ module.exports = {
         'business-address',
         'topics-of-concern',
         'my-representatives',
-        'get-involved',
+        'get-involved-onboarding',
         'done',
       ],
     },
@@ -65,6 +65,12 @@ module.exports = {
     'get-involved': {
       title: 'Get Involved',
       url: '/account/get-involved',
+      icon: 'explore',
+      color: 'orange',
+    },
+    'get-involved-onboarding': {
+      title: 'Get Involved',
+      url: '/account/onboarding/get-involved',
       icon: 'explore',
       color: 'orange',
       component: 'GetInvolved',
