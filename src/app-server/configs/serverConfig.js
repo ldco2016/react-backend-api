@@ -187,6 +187,8 @@ module.exports = {
     mynfib: generateEngageUrls(makeEngageUrl('account')),
     events: generateEngageUrls(makeEngageUrl('events')),
     'why-nfib': generateDotComUrls(makeDotComUrl('why-nfib')),
+    research: generateDotComUrls(makeDotComUrl('foundations/research-center/')),
+    'legal-center': generateDotComUrls(makeDotComUrl('foundations/legal-center/')),
   },
   appId: 'd1e4d5f5-704f-4091-8fa4-5d0b848b493d',
   session: {
