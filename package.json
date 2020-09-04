@@ -39,7 +39,7 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "camelcase-keys": "^4.1.0",
-    "lodash.merge": "^4.6.0",
+    "lodash.merge": "^4.6.2",
     "url": "^0.11.0",
     "http-proxy-middleware": "^0.17.4",
     "express": "^4.15.4",
