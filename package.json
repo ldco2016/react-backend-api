@@ -42,7 +42,7 @@
     "lodash.merge": "^4.6.0",
     "url": "^0.11.0",
     "http-proxy-middleware": "^0.17.4",
-    "express": "^4.15.4",
+    "express": "^4.17.3",
     "express-redirect": "^1.2.2",
     "express-session": "^1.15.5",
     "cheerio": "^0.22.0",
